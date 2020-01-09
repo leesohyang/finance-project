@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+	<link rel="apple-touch-icon" sizes="76x76" href="../static/img/apple-icon.png" />
+	<link rel="icon" type="image/png" href="../static/img/favicon.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>FineJob</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+    <!-- CSS Files -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../static/css/light-bootstrap-dashboard.css" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="../static/css/demo.css" rel="stylesheet" />
+    <!-- gauge 차트 가져오기 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='./image/style.css') }}">
+		<!-- <link rel="stylesheet" href="https://cdn.jupyter.org/notebook/5.1.0/style/style.min.css"> -->
+
+		<!-- Step 1) Load D3.js -->
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+
+		<!-- Step 2) Load billboard.js with style -->
+		<script src="{{url_for('static', filename='./billboard.js')}}"></script>
+
+		<!-- Load with base style -->
+		<link rel="stylesheet" href="{{ url_for('static', filename='./billboard.css') }}">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="sidebar" data-color="orange" data-image="../static/img/sidebar-4.jpg">
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a href="#" class="simple-text">
+                        FineJob
+                    </a>
+                </div>
+                <ul class="nav">
+                    <li>
+                        <a class="nav-link" href="/">
+                            <i class="nc-icon nc-zoom-split"></i>
+                            <p>Search Home</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#" onClick="history.back()">
+                        <!--<a class="nav-link" href="/company">-->
+                            <i class="nc-icon nc-notes"></i>
+                            <p>Company Information</p>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">
+                            <i class="nc-icon nc-bank"></i>
+                            <p>Financial Information</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg " color-on-scroll="500">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#pablo"> 기업 재무 상세 </a>
+                    <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-bar burger-lines"></span>
+                        <span class="navbar-toggler-bar burger-lines"></span>
+                        <span class="navbar-toggler-bar burger-lines"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                        <ul class="nav navbar-nav mr-auto">
+                        </ul>
+                        <ul class="navbar-nav ml-auto">
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- End Navbar -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="card ">
+                                <div class="card-header ">
+                                    <h4 class="card-title">{{name}}상장폐지 가능성 예측</h4>
+                                    <p class="card-category">기업 재무요소가 안정적인지 확인합니다.</p>
+                                </div>
+                                <div class="card-body ">
+                                    <div id="gaugeChart"></div>
+                                    <!-- <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div> -->
+                                    <div class="legend">
+                                        <i class="fa fa-circle text-info"></i> 양호
+                                        <i class="fa fa-circle text-warning"></i> 보통
+                                        <i class="fa fa-circle text-danger"></i> 주의
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="row">
+                            <div class="col-md-12">
+                                <div class="card  card-tasks">
+                                    <div class="card-header ">
+                                        <h4 class="card-title">Business Summary</h4>
+                                        <p class="card-category">기업에 대한 평가 근거를 확인합니다.</p>
+                                    </div>
+                                    <div class="card-body ">
+                                        <div class="table-full-width">
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{{Summary}}</td>
+<!--                                                        <td>동사는 TFT-LCD 및 OLED 등의 기술을 활용한 Display 관련 제품을 생산, 판매하는 사업을 영위하고 있으며, Display 단일 사업부문으로 구성되어 있음.-->
+<!--                                                        대부분의 제품을 해외로 판매하고 있으며, OLED 사업에서 월페이퍼 TV, CSO TV, UHD OLED TV, 플렉서블 OLED 스마트폰, Wearable용 원형 OLED 패널 등을 지속적으로 출시하고 있음. -->
+<!--                                                        상반기 전년동기 대비 연결기준 매출액은 0.5% 감소, 영업손실은 53.4% 증가, 당기순손실은 70.8% 증가. 향후 디스플레이 시장에서 살아남기 위해서는 수익성 낮은 LCD 라인 구조조정을 통해 수익성 중심 기반의 OLED로 체질 변화 필요. LCD 가동 중단 결정시 LCD 업황 빠르게 개선될 수 있음. 사업 효율화 작업에서 발생하는 비용으로 실적의 변동성은 커지지만 대형 OLED 매출 증가로 긍정적인 변화 발생이 기대됨.</td>-->
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="card  card-tasks">
+                                    <div class="card-header ">
+                                        <h4 class="card-title">리포트 요약</h4>
+                                        <p class="card-category">투자증권사의 최신 리포트 요약입니다.</p>
+                                    </div>
+                                    <div class="card-body ">
+                                        <div class="table-full-width">
+                                            <table class="table">
+                                                <thead>
+                                                    <th>일자</th>
+                                                    <th>내용</th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>-</td>
+                                                        <td>요약정보가 없습니다</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row'>    
+                    <div class="col-md-3">
+                        <div class="card card-plain table-plain-bg">
+                            <div class="card-header ">
+                                <h4 class="card-title">기업 세부 정보</h4>
+                                 <p class="card-category"></p>
+                            </div>
+                            <div class="card-body table-full-width table-responsive">
+                                <table class="table table-default">
+                                    <thead>
+                                        <th>항목</th>
+                                        <th>내용</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            {% block content %}
+                                            {{ tables0.to_html(classes="table table-striped") | safe}}
+                                            {% endblock %}
+
+                                        </tr>
+
+<!--                                        <tr>-->
+<!--                                            <td>홈페이지</td>-->
+<!--                                            <td>www.homepage.com</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>대표번호</td>-->
+<!--                                            <td>02-222-3333</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>대표자</td>-->
+<!--                                            <td>박대표</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>설립일</td>-->
+<!--                                            <td>2008.05.13</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>벤쳐기업지정일</td>-->
+<!--                                            <td>2019.08.24</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>명의개서</td>-->
+<!--                                            <td>KEB하나은행</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>주거래은행</td>-->
+<!--                                            <td>KEB하나은행</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>종업원수</td>-->
+<!--                                            <td>52명 (2017)</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>재평가일</td>-->
+<!--                                            <td>-</td>-->
+<!--                                        </tr>-->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-plain table-plain-bg">
+                            <div class="card-header ">
+                                <h4 class="card-title"></br></h4>
+                                <p class="card-category"></p>
+                            </div>
+                            <div class="card-body table-full-width table-responsive">
+                                <table class="table table-default">
+<!--                                <table class="dataframe">-->
+                                    <thead>
+                                        <th>항목</th>
+                                        <th>내용</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            {% block content0 %}
+                                            {{ tables1.to_html(classes="table table-striped") | safe}}
+                                            {% endblock %}
+
+                                        </tr>
+<!--                                        <tr>-->
+<!--                                            <td>회사영문명</td>-->
+<!--                                            <td>Alteogen</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>IR담당자</td>-->
+<!--                                            <td>-</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>계열명</td>-->
+<!--                                            <td>-</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>상장일</td>-->
+<!--                                            <td>2014.12.12</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>벤처기업해제(예정)일</td>-->
+<!--                                            <td>2021.08.23</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>공고신문</td>-->
+<!--                                            <td>매일경제</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>감사인</td>-->
+<!--                                            <td>이촌회계법인</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>감사의견</td>-->
+<!--                                            <td>적정의견</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>구기업명</td>-->
+<!--                                            <td>-</td>-->
+<!--                                        </tr>-->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-plain table-plain-bg">
+                            <div class="card-header ">
+                                <h4 class="card-title">매출 비중 추이</h4>
+                                <p class="card-category"></p>
+                            </div>
+                            <div class="card-body ">
+<!--                                <img src="{{ graph_sale }}" alt=""/>-->
+                                <img src="{{ graph_sale }}", width="550", height="400">
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class='row'>    
+                        <div class="col-md-12">
+                        <div class="card ">
+                            <div class="card-header ">
+                                <h4 class="card-title">주가 추이 그래프</h4>
+                                <p class="card-category">최근 00년 주가 그래프</p>
+                            </div>
+                            <div class="card-body ">
+                                <img src="{{ graph_stock }}", width="1600", height="500">
+<!--                                <div id="chartHours" class="ct-chart"></div>-->
+                            </div>
+<!--                            <div class="card-footer ">-->
+<!--                                <div class="legend">-->
+<!--                                    <i class="fa fa-circle text-info"></i> Open-->
+<!--                                    <i class="fa fa-circle text-danger"></i> Click-->
+<!--                                    <i class="fa fa-circle text-warning"></i> Click Second Time-->
+<!--                                </div>-->
+<!--                                <hr>-->
+<!--                                <div class="stats">-->
+<!--                                    <i class="fa fa-history"></i> Updated 3 minutes ago-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+                        </div>                
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-plain table-plain-bg">
+                                <div class="card-header ">
+                                    <h4 class="card-title">경쟁사 비교</h4>
+                                    <p class="card-category">Price & Fundamentals</p>
+                                </div>
+                                <div class="card-body ">
+<!--                                    <img src="../static/img/경쟁사비교.jpg" alt=""/>-->
+
+                                    {% block content2 %}
+                                    {{ tables2.to_html(classes="table table-striped") | safe}}
+                                    {% endblock %}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <nav>
+                        <p class="copyright text-center">
+                            ©
+                            <script>
+                                document.write(new Date().getFullYear())
+                            </script>
+                            <a href="/">FineJob</a>, made with love for a better job
+                        </p>
+                    </nav>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <!--   -->
+    <!-- <div class="fixed-plugin">
+    <div class="dropdown show-dropdown">
+        <a href="#" data-toggle="dropdown">
+            <i class="fa fa-cog fa-2x"> </i>
+        </a>
+
+        <ul class="dropdown-menu">
+			<li class="header-title"> Sidebar Style</li>
+            <li class="adjustments-line">
+                <a href="javascript:void(0)" class="switch-trigger">
+                    <p>Background Image</p>
+                    <label class="switch">
+                        <input type="checkbox" data-toggle="switch" checked="" data-on-color="primary" data-off-color="primary"><span class="toggle"></span>
+                    </label>
+                    <div class="clearfix"></div>
+                </a>
+            </li>
+            <li class="adjustments-line">
+                <a href="javascript:void(0)" class="switch-trigger background-color">
+                    <p>Filters</p>
+                    <div class="pull-right">
+                        <span class="badge filter badge-black" data-color="black"></span>
+                        <span class="badge filter badge-azure" data-color="azure"></span>
+                        <span class="badge filter badge-green" data-color="green"></span>
+                        <span class="badge filter badge-orange" data-color="orange"></span>
+                        <span class="badge filter badge-red" data-color="red"></span>
+                        <span class="badge filter badge-purple active" data-color="purple"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </a>
+            </li>
+            <li class="header-title">Sidebar Images</li>
+
+            <li class="active">
+                <a class="img-holder switch-trigger" href="javascript:void(0)">
+                    <img src="../static/img/sidebar-1.jpg" alt="" />
+                </a>
+            </li>
+            <li>
+                <a class="img-holder switch-trigger" href="javascript:void(0)">
+                    <img src="../static/img/sidebar-3.jpg" alt="" />
+                </a>
+            </li>
+            <li>
+                <a class="img-holder switch-trigger" href="javascript:void(0)">
+                    <img src="../static/img/sidebar-4.jpg" alt="" />
+                </a>
+            </li>
+            <li>
+                <a class="img-holder switch-trigger" href="javascript:void(0)">
+                    <img src="../static/img/sidebar-5.jpg" alt="" />
+                </a>
+            </li>
+
+            <li class="button-container">
+                <div class="">
+                    <a href="http://www.creative-tim.com/product/light-bootstrap-dashboard" target="_blank" class="btn btn-info btn-block btn-fill">Download, it's free!</a>
+                </div>
+            </li>
+
+            <li class="header-title pro-title text-center">Want more components?</li>
+
+            <li class="button-container">
+                <div class="">
+                    <a href="http://www.creative-tim.com/product/light-bootstrap-dashboard-pro" target="_blank" class="btn btn-warning btn-block btn-fill">Get The PRO Version!</a>
+                </div>
+            </li>
+
+            <li class="header-title" id="sharrreTitle">Thank you for sharing!</li>
+
+            <li class="button-container">
+				<button id="twitter" class="btn btn-social btn-outline btn-twitter btn-round sharrre"><i class="fa fa-twitter"></i> · 256</button>
+                <button id="facebook" class="btn btn-social btn-outline btn-facebook btn-round sharrre"><i class="fa fa-facebook-square"></i> · 426</button>
+            </li>
+        </ul>
+    </div>
+</div>
+ -->
+</body>
+
+<!--   Core JS Files   -->
+<script src="../static/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="../static/js/core/popper.min.js" type="text/javascript"></script>
+<script src="../static/js/core/bootstrap.min.js" type="text/javascript"></script>
+<!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+<script src="../static/js/plugins/bootstrap-switch.js"></script>
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<!--  Chartist Plugin  -->
+<script src="../static/js/plugins/chartist.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="../static/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Light Bootstrap Dashboard: scripts for the example pages etc -->
+<script src="../static/js/light-bootstrap-dashboard.js?v=2.0.0 " type="text/javascript"></script>
+<!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
+<script src="../static/js/demo.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Javascript method's body can be found in static/js/demos.js
+        demo.initDashboardPageCharts();
+    });
+</script>
+<script>
+	var chart = bb.generate({
+	  data: {
+		columns: [
+		["위험도", {{accuracy}}]
+		],
+		type: "gauge",
+		onclick: function (d, i) {
+		console.log("onclick", d, i);
+	   },
+		onover: function (d, i) {
+		console.log("onover", d, i);
+	   },
+		onout: function (d, i) {
+		console.log("onout", d, i);
+	   }
+	  },
+	  gauge: {},
+	  color: {
+		pattern: [
+		  "#60B044",
+		  "#F97600",
+		  "#F6C600",
+		  "#FF0000"
+		],
+		threshold: {
+		  values: [
+			30,
+			60,
+			90,
+			100
+		  ]
+		}
+	  },
+	  size: {
+		height:180,
+		width:250
+	  },
+	  bindto: "#gaugeChart"
+
+	});
+</script>
+
+</html>
